@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <title>Screenertron 9000</title>
   <style>
-  
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: sans-serif;
       background-color: #f4f7fa;
       padding: 2rem;
       margin: 0;
@@ -15,339 +14,139 @@
       max-width: 620px;
       margin: auto;
       background: #ffffff;
-      padding: 0;
+      padding: 1rem;
       border-radius: 16px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-      overflow: hidden;
-      border: 1px solid #e0e0e0;
     }
     .header {
-      background: linear-gradient(to right, #eaf3ff, #f1f7ff);
-      color: #1c3d7a;
-      padding: 1.2rem;
       text-align: center;
       font-size: 1.75rem;
       font-weight: 600;
-      border-bottom: 1px solid #c9daf6;
+      margin-bottom: 1rem;
     }
-    .content {
-      padding: 1.8rem;
+    #dropzone {
+      border: 2px dashed #bbb;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 1rem;
     }
     textarea {
       width: 100%;
       height: 120px;
       margin-bottom: 1rem;
       padding: 0.75rem;
+    }
+    button {
+      padding: 0.6rem 1rem;
       font-size: 1rem;
-      border: 1px solid #d0d0d0;
-      border-radius: 6px;
-      background-color: #fdfdfd;
-      resize: vertical;
-    }
-    .file-input-label, .action-button {
-      display: inline-block;
-      padding: 0.4rem 0.7rem;
-      background-color: #f1f3f5;
-      color: #2c3e50;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      margin: 0.5rem 0;
       cursor: pointer;
-      font-size: 0.75rem;
-      margin-right: 0.4rem;
-      margin-bottom: 1rem;
-      transition: background-color 0.2s;
-      user-select: none;
     }
-    .file-input-label:hover, .action-button:hover {
-      background-color: #e1e7ed;
-    }
-    .check-button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      margin-top: 0.5rem;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s;
-    }
-    .check-button:hover {
-      background-color: #3c7dc1;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    #dropzone {
-      border: 2px dashed #bbb;
-      border-radius: 10px;
-      padding: 1rem;
-      text-align: center;
-      color: #666;
-      margin-bottom: 1rem;
-      transition: border-color 0.3s, background-color 0.3s;
-      cursor: pointer;
-      user-select: none;
-    }
-    #dropzone.dragover {
-      border-color: #4a90e2;
-      background-color: #eaf3ff;
-      color: #1c3d7a;
-    }
-    #imagePreview {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-      display: none;
-    }
-   
-    #resultDialog {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.9);
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      max-width: 400px;
-      width: 90%;
-      padding: 1.5rem;
-      color: white;
-      font-size: 1rem;
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
-    #resultDialog.show {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    #resultDialog .header {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    #resultDialog .header .icon {
-      font-size: 1.6rem;
-    }
-    #resultDialog ul {
-      margin-top: 0.5rem;
-      padding-left: 1.3rem;
-      color: #f0f0f0;
-    }
-    #resultDialog button.close-btn {
+    #result {
       margin-top: 1rem;
-      background: rgba(255 255 255 / 0.3);
-      border: none;
-      color: white;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      user-select: none;
-      transition: background-color 0.2s;
-    }
-    #resultDialog button.close-btn:hover {
-      background: rgba(255 255 255 / 0.5);
-    }
-    .loading {
-      font-style: italic;
-      color: #666;
+      padding: 1rem;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">Screenertron 9000</div>
-    <div class="content">
-      <p>Upload or drag & drop a screenshot of an SMS, or paste a message below to check if it's a scam.</p>
+<div class="container">
+  <div class="header">Screenertron 9000</div>
 
-      <div id="dropzone">Drag & drop image here or click to select</div>
-      <input type="file" id="imageInput" accept="image/*" />
+  <div id="dropzone">Drag & drop image here or click to select</div>
+  <input type="file" id="image-input" accept="image/*" style="display:none;"/>
+  <button id="analyze-btn">Analyze Image</button>
 
-      <img id="imagePreview" alt="Image preview" />
+  <textarea id="messageInput" placeholder="Or paste message here..."></textarea>
+  <button id="checkBtn">Check Text for Scam</button>
 
-      <button class="file-input-label" id="extractBtn" disabled>Extract Text</button>
+  <div id="result"></div>
+</div>
 
-      <textarea id="messageInput" placeholder="Or paste message here..."></textarea>
-      <button id="checkBtn" class="check-button">Check for Scam</button>
+<script>
+  const dropzone = document.getElementById('dropzone');
+  const imageInput = document.getElementById('image-input');
+  const analyzeBtn = document.getElementById('analyze-btn');
+  const checkBtn = document.getElementById('checkBtn');
+  const messageInput = document.getElementById('messageInput');
+  const resultDiv = document.getElementById('result');
 
-      <div id="loading" class="loading" style="display:none;">Analyzing...</div>
-    </div>
-  </div>
+  dropzone.addEventListener('click', () => imageInput.click());
 
-  <dialog id="resultDialog" role="alertdialog" aria-modal="true" aria-labelledby="resultTitle" aria-describedby="resultDetails">
-    <div class="header" id="resultTitle"></div>
-    <div id="resultDetails"></div>
-    <button class="close-btn" aria-label="Close results dialog">Close</button>
-  </dialog>
-
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
-  <script>
-  document.getElementById("analyze-btn").addEventListener("click", () => {
-    const imageInput = document.getElementById("image-input");
-    const file = imageInput.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      fetch("/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: reader.result })
-      })
-        .then(res => res.json())
-        .then(data => {
-          console.log(data); 
-        })
-        .catch(err => {
-          console.error("Error:", err);
-          alert("Failed to connect to the analysis server. Is it running?");
-        });
-    };
-
-    if (file) reader.readAsDataURL(file);
+  dropzone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropzone.style.borderColor = 'blue';
   });
-</script>
 
-  <script>
-    
-    const dropzone = document.getElementById('dropzone');
-    const imageInput = document.getElementById('imageInput');
-    const imagePreview = document.getElementById('imagePreview');
-    const extractBtn = document.getElementById('extractBtn');
-    const messageInput = document.getElementById('messageInput');
-    const checkBtn = document.getElementById('checkBtn');
-    const loadingIndicator = document.getElementById('loading');
-    const resultDialog = document.getElementById('resultDialog');
-    const resultTitle = document.getElementById('resultTitle');
-    const resultDetails = document.getElementById('resultDetails');
-    const closeBtn = resultDialog.querySelector('.close-btn');
+  dropzone.addEventListener('dragleave', () => {
+    dropzone.style.borderColor = '#bbb';
+  });
 
-    let extractedText = '';
-
-    
-    dropzone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropzone.classList.add('dragover');
-    });
-    dropzone.addEventListener('dragleave', () => {
-      dropzone.classList.remove('dragover');
-    });
-    dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('dragover');
-      if (e.dataTransfer.files.length) {
-        handleFile(e.dataTransfer.files[0]);
-      }
-    });
-    dropzone.addEventListener('click', () => {
-      imageInput.click();
-    });
-
-   
-    imageInput.addEventListener('change', () => {
-      if (imageInput.files.length) {
-        handleFile(imageInput.files[0]);
-      }
-    });
-
-    function handleFile(file) {
-      if (!file.type.startsWith('image/')) {
-        alert('Please upload an image file.');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        imagePreview.src = event.target.result;
-        imagePreview.style.display = 'block';
-        extractBtn.disabled = false;
-        extractedText = '';
-        messageInput.value = '';
-      };
-      reader.readAsDataURL(file);
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.style.borderColor = '#bbb';
+    if (e.dataTransfer.files.length) {
+      imageInput.files = e.dataTransfer.files;
     }
+  });
 
-    extractBtn.addEventListener('click', () => {
-      if (!imagePreview.src) return;
-      loadingIndicator.style.display = 'block';
-      extractBtn.disabled = true;
-      messageInput.value = '';
-      Tesseract.recognize(imagePreview.src, 'eng', {
-        logger: m => {
-          
-        }
-      }).then(({ data: { text } }) => {
-        extractedText = text.trim();
-        messageInput.value = extractedText;
-        loadingIndicator.style.display = 'none';
-        extractBtn.disabled = false;
-      }).catch(err => {
-        alert('Failed to extract text from image.');
-        loadingIndicator.style.display = 'none';
-        extractBtn.disabled = false;
-      });
-    });
-
-    checkBtn.addEventListener('click', () => {
-      let textToAnalyze = messageInput.value.trim();
-      if (!textToAnalyze) {
-        alert('Please provide a message to analyze.');
-        return;
-      }
-      loadingIndicator.style.display = 'block';
-      checkBtn.disabled = true;
-
-      fetch('http://localhost:5000/analyze', {
+  analyzeBtn.addEventListener('click', () => {
+    const file = imageInput.files[0];
+    if (!file) return alert('Select an image first.');
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      fetch('/analyze', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ message: textToAnalyze })
-      }).then(async response => {
-        loadingIndicator.style.display = 'none';
-        checkBtn.disabled = false;
-        if (!response.ok) {
-          const error = await response.json();
-          alert(error.error || 'Failed to analyze message.');
-          return;
-        }
-        const data = await response.json();
-        showResultDialog(data);
-      }).catch(() => {
-        loadingIndicator.style.display = 'none';
-        checkBtn.disabled = false;
-        alert('Failed to connect to the analysis server. Is it running?');
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({image: reader.result})
+      })
+      .then(res => res.json())
+      .then(data => {
+        displayResult(data);
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Failed to connect to server.');
       });
-    });
+    };
+    reader.readAsDataURL(file);
+  });
 
-    function showResultDialog(data) {
-  if (data.is_scam) {
-    resultDialog.style.backgroundColor = '#d1443e'; // red
-    resultTitle.innerHTML = `🚨 Scam Detected: ${data.scam_type.toUpperCase()}`;
-    let flagsHtml = '';
-    if (data.red_flags.length) {
-      flagsHtml = '<ul>' + data.red_flags.map(flag => `<li>${flag}</li>`).join('') + '</ul>';
+  checkBtn.addEventListener('click', () => {
+    const message = messageInput.value.trim();
+    if (!message) return alert('Enter a message first.');
+    fetch('/analyze', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message})
+    })
+    .then(res => res.json())
+    .then(data => {
+      displayResult(data);
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Failed to connect to server.');
+    });
+  });
+
+  function displayResult(data) {
+    if (data.error) {
+      resultDiv.innerHTML = `<strong>Error:</strong> ${data.error}`;
+      return;
     }
-    resultDetails.innerHTML = `Red flags:<br>${flagsHtml}`;
-  } else {
-    resultDialog.style.backgroundColor = '#388e3c'; // green
-    resultTitle.textContent = '✅ No Scam Detected';
-    resultDetails.textContent = 'This message does not appear to be a scam.';
+
+    const r = data.detection_result;
+    resultDiv.style.backgroundColor = r.is_scam ? '#f8d7da' : '#d4edda';
+    resultDiv.style.color = '#000';
+    resultDiv.innerHTML = `
+      <strong>Extracted Text:</strong><br>${data.extracted_text}<br><br>
+      <strong>Scam?</strong> ${r.is_scam ? '🚨 YES' : '✅ No'}<br>
+      <strong>Scam Type:</strong> ${r.scam_type}<br>
+      <strong>Red Flags:</strong> ${r.red_flags.join(', ')}
+    `;
   }
-
-  resultDialog.classList.add('show');
-  resultDialog.showModal();
-}
-
-    closeBtn.addEventListener('click', () => {
-      resultDialog.close();
-    });
-  </script>
+</script>
 </body>
 </html>
